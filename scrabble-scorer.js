@@ -40,9 +40,45 @@ function initialPrompt() {
 
 let newPointStructure;
 
-let simpleScorer;
 
-let vowelBonusScorer;
+// Task 2 - Function that takes each letter within the word is worth 1 point
+let simpleScorer = function(word) {
+   word = word.toUpperCase();
+   let pointValue = 0;
+
+   for (let i = 0; i < word.length; i++) {
+      pointValue += 1
+      //letterPoints += `Points of '${word[i]}': is 1\n`
+      
+    }
+    return `Using Simple Scorer: Each letter is worth 1 point.
+    Total points for "${word}" is ${pointValue}\n`;
+
+};
+
+
+// Task 2 - Function that takes each VOWEL to worth 3 points and each Consonant is worth 1 point 
+let vowelBonusScorer = function(word) {
+   word = word.toUpperCase();
+   let pointValue = 0;
+   let letterPoints = "";
+
+   for (let i = 0; i < word.length; i++) {
+      if (word[i] === "A" || word[i] === "E" || word[i] === "I" || word[i] === "O" || word[i] === "U") {
+         pointValue += 3;
+         letterPoints += `Points for '${word[i]}': 3\n`
+      } else {
+         pointValue += 1;
+         letterPoints += `Points for '${word[i]}': 1\n`
+      }
+   }
+
+   console.log(letterPoints);
+
+   return `Using Vowel Bonus Scorer: Total points for "${word}" is ${pointValue}`
+};
+
+
 
 let scrabbleScorer;
 
@@ -56,6 +92,8 @@ function runProgram() {
    //initialPrompt();
    let wordTest = initialPrompt();
    console.log(oldScrabbleScorer(wordTest));
+   console.log(simpleScorer(wordTest));
+   console.log(vowelBonusScorer(wordTest));
    
 }
 
