@@ -28,11 +28,9 @@ function oldScrabbleScorer(word) {
          numPointValue = Number(pointValue);
          totalPoints += numPointValue;
 		 }
- 
 	  }
 	}
 	console.log(letterPoints);
-   
    return totalPoints;
  }
 
@@ -48,7 +46,13 @@ function initialPrompt() {
    //console.log("Let's play some scrabble! Enter a word:");
 };
 
-let newPointStructure;
+
+
+
+// Task 4 - Assigning transform(oldPointStructure) to newPointStructure variable.
+let newPointStructure = transform(oldPointStructure);
+
+
 
 
 
@@ -58,15 +62,12 @@ let simpleScorer = function(word) {
    let pointValue = 0;
 
    for (let i = 0; i < word.length; i++) {
-      pointValue += 1
-      //letterPoints += `Points of '${word[i]}': is 1\n`
-      
+      pointValue += 1;
     }
     //console.log("Using Simple Scorer: Each letter is worth 1 point.");
-
     return pointValue;
-
 };
+
 
 
 
@@ -88,22 +89,62 @@ let vowelBonusScorer = function(word) {
 
    console.log("");
    console.log(letterPoints);
+   //console.log(`Using Vowel Bonus Scorer: Total points for "${word}" is ${pointValue}`);
 
-   //return `Using Vowel Bonus Scorer: Total points for "${word}" is ${pointValue}`
    return pointValue;
 };
 
 
 
-let scrabbleScorer;
+
+let scrabbleScorer = function(word) {
+   word = word.toLowerCase();
+	let letterPointsMsg = "";
+   let totalPoints = 0;
+ 
+	for (let i = 0; i < word.length; i++) {
+ 
+	  for (const keyValue in newPointStructure) {
+ 
+		 if (keyValue === word[i]) {
+			letterPointsMsg += `Points for '${word[i]}': ${newPointStructure[keyValue]}\n`
+         numPointValue = Number(newPointStructure[keyValue]);
+         totalPoints += numPointValue;
+		 }
+	  }
+	}
+	console.log(letterPointsMsg);
+   return totalPoints;
+};
+
+
 
 
 // Task 2 - Add & Organize Scoring Algorithm
 const scoringAlgorithms = [
-   {name: "Simple Score", description: "Each letter is worth 1 point.", scoreFunction: simpleScorer}, 
-   {name: "Bonus Vowels", description: "Vowels are worth 3 points. Consonants are 1 point.", scoreFunction: vowelBonusScorer}, 
-   {name: "Scrabble", description: "The traditional scoring algorithm.", scoreFunction: oldScrabbleScorer}
+    {name: "Simple Score", description: "Each letter is worth 1 point.", scorerFunction: simpleScorer}, 
+    {name: "Bonus Vowels", description: "Vowels are worth 3 points. Consonants are 1 point.", scorerFunction: vowelBonusScorer}, 
+    {name: "Scrabble", description: "The traditional scoring algorithm.", scorerFunction: scrabbleScorer},
 ];
+
+// const scoringAlgorithms = [
+//    {
+//       name: "Simple",
+//       description: "One point per character",
+//       scorerFunction: simpleScorer
+//    },
+//    {
+//       name: "Vowel Bonus",
+//       description: "Vowels are worth 3 points",
+//       scorerFunction: vowelBonusScorer
+//    },
+//    {
+//       name: "Scrabble",
+//       description: "Uses scrabble point system",
+//       scorerFunction: scrabbleScorer
+//    }
+// ];
+
 
 
 function scorerPrompt(word) {
@@ -114,7 +155,7 @@ function scorerPrompt(word) {
    1 - Vowel Bonus: Vowels are worth 3 points
    2 - Scrabble: Uses scrabble point system
 
-   Enter 0, 1, or 2: `)
+   Enter 0, 1, or 2: `); 
    
    let scoreOption = Number(userSelect);
    
@@ -126,13 +167,38 @@ function scorerPrompt(word) {
 
    console.log(`You have selected ${scoringAlgorithms[scoreOption].name}. ${scoringAlgorithms[scoreOption].description}
       
-   Score for "${word}": ${scoringAlgorithms[scoreOption].scoreFunction(word)}`);
-
-
+   Score for "${word}": ${scoringAlgorithms[scoreOption].scorerFunction(word)}`);
 };
 
 
-function transform() {};
+
+
+// Task 4 - Transform oldPointStructure to a new object switches keys & values pairs and making key Lowercase
+function transform(oldPointStructure) {
+   let lowercaseObj = {};
+   let letterKeyStr = [];
+   
+   
+   // Iterates through EACH key value in Object
+   for (let numKey in oldPointStructure) {
+      
+      letterKeyStr = oldPointStructure[numKey];
+      let numKeyValue = Number(numKey);
+      //numKeyValueArray.push(numKeyValue);
+
+            
+      // GOAL is to iterate each element in the array to convert to string to assign as a Key
+      for (let i = 0; i < letterKeyStr.length; i++) {
+         
+         let lowercaseLetterKey = letterKeyStr[i].toString().toLowerCase();
+         lowercaseObj[lowercaseLetterKey] = numKeyValue
+      }
+   }
+   return lowercaseObj;
+};
+
+
+
 
 function runProgram() {
    //initialPrompt();
@@ -141,8 +207,14 @@ function runProgram() {
    //console.log(simpleScorer(wordTest));
    //console.log(vowelBonusScorer(wordTest));
    scorerPrompt(wordTest);
-   
+   console.log("");
+   //console.log(transform(oldPointStructure));
+   //console.log(newPointStructure);
+
 }
+
+
+
 
 // Don't write any code below this line //
 // And don't change these or your program will not run as expected //
